@@ -26,8 +26,8 @@ public:
             cfg.pin_cs        = 10;
             cfg.pin_rst       = 1;
             cfg.pin_busy      = -1;
-            cfg.memory_width  = 80;
-            cfg.memory_height = 160;
+            cfg.memory_width  = 132;
+            cfg.memory_height = 162;
             cfg.panel_width   = 80;
             cfg.panel_height  = 160;
             cfg.offset_x      = 26;
@@ -55,6 +55,25 @@ public:
         setBrightness(brightness);
         fillScreen(TFT_BLACK);
         return ok;
+    }
+
+    void setRotation(uint8_t rotation) {
+        rotation &= 3;
+        if (getRotation() == rotation)
+            return;
+
+        fillScreen(TFT_BLACK);
+
+        if (rotation == 1 || rotation == 3)
+            lgfx::LGFX_Device::setRotation(rotation);
+
+        auto cfg = _panel_instance.config();
+        cfg.offset_x = 26;
+        cfg.offset_y = 1;
+        _panel_instance.config(cfg);
+
+        if (rotation == 0 || rotation == 2)
+            lgfx::LGFX_Device::setRotation(rotation);
     }
 };
 
